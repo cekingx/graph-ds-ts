@@ -17,5 +17,5 @@ export const run = () => {
   nodes.forEach((node) => graph.addNode(node));
   edges.forEach(([from, to]) => graph.addEdge(from, to));
 
-  graph.useDfs('a', 'e');
+  console.log(graph.shortestPathDfs('a', 'e'));
 }

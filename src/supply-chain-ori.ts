@@ -18,24 +18,20 @@ export class SupplyChainGraph {
     edges.push(to);
   }
 
-  useDfs(from: string, to: string) {
-    this.dfs(from, to);
-  }
-
-  dfs(from: string, to: string, visited: Set<string> = new Set()) {
-    console.log('from', from);
-    visited.add(from);
-    const destinations = this.adjacencyList.get(from) as Array<string>;
-
-    for(const destination of destinations) {
-      if(destination == to) {
-        console.log('found', to);
-        return;
+  shortestPathDfs = (startNode: string, stopNode: string) => {
+    const previous = new Map();
+    let shortestDistance = -1;
+    const dfs = (currentNode: string, depth: number) => {
+      if (currentNode === stopNode) {
+        shortestDistance = depth;
+      } else {
+        for (let neighbour of (this.adjacencyList.get(currentNode) as Array<string>)) {
+          previous.set(neighbour, currentNode);
+          dfs(neighbour, depth + 1);
+        }
       }
-
-      if(!visited.has(destination) && ((this.adjacencyList.get(destination) as Array<string>).length > 0)) {
-        this.dfs(destination, to, visited)
-      }
-    }
-  }
+    };
+    dfs(startNode, 0);
+    return { shortestDistance, previous };
+  };
 }
